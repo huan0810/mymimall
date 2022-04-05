@@ -2,13 +2,20 @@
      <router-view></router-view>嵌入其他页面的核心代码 -->
 <template>
   <div>
-    <nav-header></nav-header>
+    <order-header></order-header>
     <router-view></router-view>
     <nav-footer></nav-footer>
   </div>
 </template>
 <script>
+// 加载组件
+import OrderHeader from '@/components/OrderHeader'
+import NavFooter from '@/components/NavFooter'
 export default {
-  name: '',
+  name: 'order',
+  components: {
+    OrderHeader,
+    NavFooter,
+  },
 }
 </script>
