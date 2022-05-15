@@ -12,7 +12,23 @@ export default {
   data() {
     return {}
   },
-  mounted() {}
+  mounted() {
+    this.getUser()
+    this.getCartCount()
+  },
+  methods: {
+    getUser() {
+      // 拉取用户信息保存到vuex里
+      this.axios.get('/user').then(() => {
+        // TODO 保存到vuex里
+      })
+    },
+    getCartCount() {
+      this.axios.get('/carts/products/sum').then(() => {
+        // TODO 保存到vuex里
+      })
+    }
+  }
 }
 </script>
 

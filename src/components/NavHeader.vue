@@ -10,6 +10,7 @@
         </div>
         <div class="topbar-user">
           <a href="javascript:;" v-if="username">{{username}}</a>
+          <a href="javascript:;" v-if="!username" @click="register">注册</a>
           <a href="javascript:;" v-if="!username" @click="login">登录</a>
           <a href="javascript:;" v-if="username">我的订单</a>
           <a href="javascript:;" class="my-cart" @click="goToCart"><span class="icon-cart"></span>购物车</a>
@@ -133,6 +134,9 @@ export default {
     this.getProductList()
   },
   methods: {
+    register() {
+      this.$router.push('/register')
+    },
     login() {
       this.$router.push('/login')
     },
@@ -177,6 +181,7 @@ export default {
         background-color: $colorA;
         text-align: center; //水平居中
         color: #fff;
+        margin-right: 0;
         .icon-cart {
           @include bgImg(16px, 12px, '/public/imgs/icon-cart-checked.png');
           margin-right: 4px;
