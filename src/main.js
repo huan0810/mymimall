@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import router from './router'
 import axios from 'axios'
+import VueLazyLoad from 'vue-lazyload'
 import App from './App.vue'
 
 // 接口代理proxy进行跨域
@@ -25,6 +26,9 @@ axios.interceptors.response.use(function (response) {
 Vue.config.productionTip = false
 // 把axios挂载到原型上，然后在其他组件内部可以用this.axios访问了
 Vue.prototype.axios = axios
+Vue.use(VueLazyLoad, {
+  loading: '/imgs/loading-svg/loading-bubbles.svg'
+})
 
 new Vue({
   render: (h) => h(App),
