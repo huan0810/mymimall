@@ -13,7 +13,7 @@
           <a href="javascript:;" v-if="!username" @click="register">注册</a>
           <a href="javascript:;" v-if="!username" @click="login">登录</a>
           <a href="javascript:;" v-if="username">我的订单</a>
-          <a href="javascript:;" class="my-cart" @click="goToCart"><span class="icon-cart"></span>购物车</a>
+          <a href="javascript:;" class="my-cart" @click="goToCart"><span class="icon-cart"></span>购物车({{cartCount}})</a>
         </div>
       </div>
     </div>
@@ -120,8 +120,16 @@ export default {
   name: 'nav-header',
   data() {
     return {
-      username: '',
       phoneList: []
+    }
+  },
+  computed: {
+    username() {
+      // 从vuex中读取用户名.因为向服务端拉取用户信息有延迟，所以放在计算属性中
+      return this.$store.state.username
+    },
+    cartCount() {
+      return this.$store.state.cartCount
     }
   },
   filters: {

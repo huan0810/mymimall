@@ -3,6 +3,7 @@ import router from './router'
 import axios from 'axios'
 import VueLazyLoad from 'vue-lazyload'
 import VueCookie from 'vue-cookies'
+import store from './store' //导入vuex
 import App from './App.vue'
 
 // 接口代理proxy进行跨域
@@ -40,5 +41,6 @@ Vue.use(VueLazyLoad, {
 new Vue({
   render: (h) => h(App),
   // 加载路由，键和值一样省略值
-  router
+  router,
+  store
 }).$mount('#app')

@@ -63,7 +63,7 @@ export default {
         .then(res => {
           // 登录成功，把返回的用户id存入cookies，有效期一个月
           this.$cookies.set('userId', res.id, { expires: '1M' })
-          // TODO: 登录 vuex
+          this.$store.dispatch('saveUserName', res.username) //触发action，把用户信息存vuex
           this.$router.push('/index')
         })
     }
