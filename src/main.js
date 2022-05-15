@@ -3,14 +3,22 @@ import router from './router'
 import axios from 'axios'
 import App from './App.vue'
 
-// 设置响应拦截器
+// 接口代理proxy进行跨域
+axios.defaults.baseURL = '/api' //转发时把/api置为空
+axios.defaults.timeout = 8000
+
+// 响应拦截器,接口错误拦截
 axios.interceptors.response.use(function (response) {
-  // 注意response返回的是axios给我们封装的对象,其中response.data才是服务器真正的返回值
+  // response返回的是axios给我们封装的对象,其中response.data才是服务器真正的返回值
   let res = response.data
   if (res.status == 0) {
+    // 成功，状态码为0
     return res.data
   } else if (res.status == 10) {
-    //10在这里表示未登录的状态码
+    // 未登录，状态码10
+    window.location.href = '/#/login'
+  } else {
+    alert(res.msg)
   }
 })
 
@@ -21,5 +29,5 @@ Vue.prototype.axios = axios
 new Vue({
   render: (h) => h(App),
   // 加载路由，键和值一样省略值
-  router,
+  router
 }).$mount('#app')

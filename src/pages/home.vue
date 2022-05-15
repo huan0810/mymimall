@@ -2,7 +2,6 @@
      <router-view></router-view>嵌入这三个页面的核心代码 -->
 <template>
   <div>
-    home
     <nav-header></nav-header>
     <router-view></router-view>
     <nav-footer></nav-footer>
@@ -15,7 +14,7 @@ export default {
   name: 'nav-home',
   components: {
     NavHeader,
-    NavFooter,
-  },
+    NavFooter
+  }
 }
 </script>

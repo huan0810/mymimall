@@ -27,24 +27,24 @@ export default new Router({
         {
           path: '/index',
           name: 'index',
-          component: Index,
+          component: Index
         },
         {
           path: '/product/:id',
           name: 'product',
-          component: Product,
+          component: Product
         },
         {
           path: '/detail/:id',
           name: 'detail',
-          component: Detail,
-        },
-      ],
+          component: Detail
+        }
+      ]
     },
     {
       path: '/cart',
       name: 'cart',
-      component: Cart,
+      component: Cart
     },
     {
       path: '/order',
@@ -54,25 +54,25 @@ export default new Router({
         {
           path: 'confirm',
           name: 'order-confirm',
-          component: OrderConfirm,
+          component: OrderConfirm
         },
         {
           // 子路由的path可以写/order/list或list，但不能写/list
           path: 'list',
           name: 'order-list',
-          component: OrderList,
+          component: OrderList
         },
         {
           path: 'pay',
           name: 'order-pay',
-          component: OrderPay,
+          component: OrderPay
         },
         {
           path: 'alipay',
           name: 'ali-pay',
-          component: AliPay,
-        },
-      ],
-    },
-  ],
+          component: AliPay
+        }
+      ]
+    }
+  ]
 })
