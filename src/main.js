@@ -24,6 +24,7 @@ axios.interceptors.response.use(function (response) {
       //首页在未登录状态下也可以访问
       window.location.href = '/#/login'
     }
+    return Promise.reject(res)
   } else {
     alert(res.msg)
     return Promise.reject(res)

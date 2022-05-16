@@ -226,17 +226,20 @@ export default {
           this.phoneList = [res.list.slice(6, 10), res.list.slice(10)]
         })
     },
-    addCart() {
-      this.showModal = true
-      // this.axios
-      //   .post('/carts', {
-      //     productId: id,
-      //     selected: true
-      //   })
-      //   .then(() => {})
-      //   .catch(() => {
-      //     this.showModal = true
-      //   })
+    addCart(id) {
+      this.axios
+        .post('/carts', {
+          productId: id,
+          selected: true
+        })
+        .then(res => {
+          this.showModal = true //弹出模态框
+          // 把购物车数量更新到vuex
+          this.$store.dispatch('saveCartCount', res.cartTotalQuantity)
+        })
+        .catch(() => {
+          this.showModal = true
+        })
     },
     goToCart() {
       this.$router.push('/cart')
