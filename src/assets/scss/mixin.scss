@@ -2,7 +2,6 @@
 @mixin flex($hov: space-between, $col: center) {
   // justify-content:space-between主轴上子元素先两边贴边，再平分剩余空间
   // align-items:center侧轴上子元素(单行)，居中
-  align-items: center;
   display: flex;
   justify-content: $hov;
   align-items: $col;

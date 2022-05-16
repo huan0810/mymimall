@@ -29,24 +29,14 @@
         </div>
       </div>
     </div>
-    <div class="footer">
-      <div class="footer-link">
-        <a href="javascript:;">帮助中心</a><span>|</span>
-        <a href="javascript:;">服务支持</a><span>|</span>
-        <a href="javascript:;">服务支持</a><span>|</span>
-        <a href="javascript:;">关于小米</a><span>|</span>
-        <a href="javascript:;">关注我们</a><span>|</span>
-        <a href="javascript:;">特色服务</a>
-      </div>
-      <div class="copyright">
-        © mi.com 京ICP证110507号 京ICP备10046444号 京公网安备11010802020134号 京网文[2020]0276-042号
-      </div>
-    </div>
+    <nav-footer></nav-footer>
   </div>
 </template>
 <script>
+import NavFooter from '@/components/NavFooter.vue'
 export default {
   name: 'login',
+  components: { NavFooter },
   data() {
     return {
       username: '',
@@ -136,25 +126,6 @@ export default {
           font-size: 16px;
         }
       }
-    }
-  }
-  .footer {
-    height: 100px;
-    padding-top: 60px;
-    color: #999999;
-    font-size: 16px;
-    text-align: center;
-    .footer-link {
-      a {
-        color: #999999;
-        display: inline-block;
-      }
-      span {
-        margin: 0 10px;
-      }
-    }
-    .copyright {
-      margin-top: 13px;
     }
   }
 }

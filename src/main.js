@@ -14,7 +14,7 @@ axios.defaults.timeout = 8000
 axios.interceptors.response.use(function (response) {
   // response返回的是axios给我们封装的对象,其中response.data才是服务器真正的返回值
   let res = response.data
-  let path = location.hash
+  let path = location.hash //location 属性用于获取或设置窗体的 URL
   if (res.status == 0) {
     // 成功，状态码为0
     return res.data
