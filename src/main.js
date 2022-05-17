@@ -29,7 +29,7 @@ axios.interceptors.response.use(function (response) {
     }
     return Promise.reject(res)
   } else {
-    this.$message.warning(res.msg)
+    Message.warning(res.msg) //此处不能用this.$message，因为还没挂载到Vue.prototype上
     return Promise.reject(res)
   }
 })

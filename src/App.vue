@@ -12,9 +12,13 @@ export default {
   data() {
     return {}
   },
-  created() {
-    this.getUser()
-    this.getCartCount()
+  mounted() {
+    // 能获取到userId,说明是登录状态，
+    // 只有登录时才向后端获取用户信息和购物车数量。否则不必浪费资源
+    if (this.$cookies.get('userId')) {
+      this.getUser()
+      this.getCartCount()
+    }
   },
   methods: {
     getUser() {

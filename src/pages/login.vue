@@ -52,9 +52,15 @@ export default {
         })
         .then(res => {
           // 登录成功，把返回的用户id存入cookies，有效期一个月
-          this.$cookies.set('userId', res.id, { expires: '1M' })
+          this.$cookies.set('userId', res.id, { expires: 'Session' })
           this.$store.dispatch('saveUserName', res.username) //触发action，把用户信息存vuex
-          this.$router.push('/index')
+          // 为了判断是从登录页面跳转到index页面的，此处的push要传递参数
+          this.$router.push({
+            name: 'index', //要跳转页面的路由规则的名字
+            params: {
+              from: 'login'
+            }
+          })
         })
     }
   }
