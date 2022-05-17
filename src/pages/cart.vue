@@ -92,14 +92,14 @@ export default {
       if (type == '-') {
         // 减少商品数量
         if (quantity == 1) {
-          alert('商品至少保留一件')
+          this.$message.warning('商品至少保留一件')
           return
         }
         --quantity
       } else if (type == '+') {
         // 增加商品数量
         if (quantity > item.productStock) {
-          alert('商品购买数量不能超过库存数量')
+          this.$message.warning('商品购买数量不能超过库存数量')
           return
         }
         ++quantity
@@ -120,6 +120,7 @@ export default {
     delProduct(item) {
       // 删除当前商品
       this.axios.delete(`/carts/${item.productId}`).then(res => {
+        this.$message.success('删除成功')
         this.renderData(res)
       })
     },
@@ -142,7 +143,7 @@ export default {
       // 购物车“去结算”
       let isCheck = this.list.every(item => !item.productSelected)
       if (isCheck) {
-        alert('请选择一件商品')
+        this.$message.warning('请选择一件商品')
       } else {
         this.$router.push('/order/confirm')
       }

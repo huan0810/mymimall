@@ -3,6 +3,9 @@ import router from './router'
 import axios from 'axios'
 import VueLazyLoad from 'vue-lazyload'
 import VueCookie from 'vue-cookies'
+// 按需引入element-ui
+import { Message } from 'element-ui'
+// import 'element-ui/lib/theme-chalk/index.css'
 import store from './store' //导入vuex
 import App from './App.vue'
 
@@ -26,18 +29,20 @@ axios.interceptors.response.use(function (response) {
     }
     return Promise.reject(res)
   } else {
-    alert(res.msg)
+    this.$message.warning(res.msg)
     return Promise.reject(res)
   }
 })
 
 Vue.config.productionTip = false
-// 把axios挂载到原型上，然后在其他组件内部可以用this.axios访问了
-Vue.prototype.axios = axios
+
 Vue.use(VueCookie)
 Vue.use(VueLazyLoad, {
   loading: '/imgs/loading-svg/loading-bubbles.svg'
 })
+// 把axios挂载到原型上，然后在其他组件内部可以用this.axios访问了
+Vue.prototype.axios = axios
+Vue.prototype.$message = Message
 
 new Vue({
   render: (h) => h(App),
