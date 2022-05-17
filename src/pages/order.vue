@@ -1,4 +1,4 @@
-<!-- order.vue承载了购物车,支付订单等页面的头部尾部，
+<!-- order.vue承载了支付订单相关页面的头部尾部，
      <router-view></router-view>嵌入其他页面的核心代码 -->
 <template>
   <div>
@@ -15,7 +15,7 @@ export default {
   name: 'order',
   components: {
     OrderHeader,
-    NavFooter,
-  },
+    NavFooter
+  }
 }
 </script>
