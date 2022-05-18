@@ -95,7 +95,7 @@
           </div>
           <div class="btn-group">
             <a href="/#/cart" class="btn btn-default btn-large">返回购物车</a>
-            <a href="javascript:;" class="btn btn-large">去结算</a>
+            <a href="javascript:;" class="btn btn-large" @click="orderSubmit">去结算</a>
           </div>
         </div>
       </div>
@@ -161,7 +161,7 @@ export default {
       userAction: '', //用户行为：0新增地址，1编辑，2删除
       showDelModal: false, //控制删除地址模态框弹出
       showEditModal: false, //控制新增地址弹框的弹出
-      checkIndex: 0 //当前选中的地址框，默认选中第一个
+      checkIndex: 0 //当前鼠标点击的地址框的索引，默认选中第一个
     }
   },
   mounted() {
@@ -184,7 +184,7 @@ export default {
     },
     editAddressModal(item) {
       // 编辑地址时弹出弹框
-      this.checkedAddress = item
+      this.checkedAddress = JSON.parse(JSON.stringify(item))
       this.userAction = 1
       // 弹出模态框
       this.showEditModal = true
@@ -199,9 +199,9 @@ export default {
     submitAddress() {
       // 提交地址，地址新增，编辑，删除功能封装在一个函数里面
       let { checkedAddress, userAction } = this
-      let method,
-        url,
-        params = {}
+      let method
+      let url
+      let params = {}
       if (userAction == 0) {
         // 新增地址
         method = 'post'
@@ -219,7 +219,7 @@ export default {
         // 新增、编辑地址时，要传递参数
         let { receiverName, receiverMobile, receiverProvince, receiverCity, receiverDistrict, receiverAddress, receiverZip } = checkedAddress
         // 表单校验
-        let errMsg
+        let errMsg = ''
         if (!receiverName) {
           errMsg = '请输入收货人姓名'
         } else if (!receiverMobile || !/\d{11}/.test(receiverMobile)) {
@@ -272,6 +272,26 @@ export default {
           this.count += item.quantity
         })
       })
+    },
+    orderSubmit() {
+      // 先判断当前有没有选中地址
+      let item = this.list[this.checkIndex]
+      if (!item) {
+        this.$message.error('请选择收货地址')
+        return
+      }
+      this.axios
+        .post('/orders', {
+          shippingId: item.id
+        })
+        .then(res => {
+          this.$router.push({
+            path: '/order/pay',
+            query: {
+              orderNo: res.orderNo
+            }
+          })
+        })
     }
   }
 }
