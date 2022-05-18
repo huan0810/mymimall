@@ -1,5 +1,10 @@
 <template>
   <div class="order-pay">
+    <order-header :title="'订单支付'">
+      <template v-slot:tip>
+        <span>请谨防钓鱼链接或诈骗电话，了解更多></span>
+      </template>
+    </order-header>
     <div class="wrapper">
       <div class="container">
         <div class="order-wrap">
@@ -44,8 +49,8 @@
           <h3>选择以下支付方式付款</h3>
           <div class="pay-way">
             <p>支付平台</p>
-            <div class="pay pay-ali checked"></div>
-            <div class="pay pay-wechat"></div>
+            <div class="pay pay-ali" :class="{'checked':payType==1}" @click="paySubmit(1)"></div>
+            <div class="pay pay-wechat" :class="{'checked':payType==2}" @click="paySubmit(2)"></div>
           </div>
         </div>
       </div>
@@ -53,15 +58,19 @@
   </div>
 </template>
 <script>
+import OrderHeader from '@/components/OrderHeader'
+
 export default {
   name: 'order-pay',
+  components: { OrderHeader },
   data() {
     return {
       orderNo: this.$route.query.orderNo,
       userInfo: '', //收货人信息
       orderItemVoList: [], //订单项列表
       payment: 0, //订单总金额
-      showDetail: false //是否显示订单详情
+      showDetail: false, //是否显示订单详情
+      payType: '' //支付类型，1支付宝，2微信
     }
   },
   mounted() {
@@ -75,6 +84,12 @@ export default {
         this.orderItemVoList = res.orderItemVoList
         this.payment = res.payment
       })
+    },
+    paySubmit(payType) {
+      this.payType = payType //用于选中高亮显示
+      if (payType == 1) {
+        window.open('/#/order/alipay?orderId=' + this.orderNo, '_blank')
+      }
     }
   }
 }
