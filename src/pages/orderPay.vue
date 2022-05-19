@@ -86,7 +86,7 @@ export default {
       T: '' //定时器id
     }
   },
-  mounted() {
+  created() {
     this.getOrderDetail()
   },
   methods: {

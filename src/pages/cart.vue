@@ -9,7 +9,8 @@
     </order-header>
     <div class="wrapper">
       <div class="container">
-        <div class="cart-box">
+        <loading v-if="loading"></loading>
+        <div class="cart-box" v-if="list.length>0">
           <ul class="cart-item-head">
             <li class="col-1"><span class="checkbox" :class="{'checked':selectedAll}" @click="toggleAll"></span>全选</li>
             <li class="col-3">商品名称</li>
@@ -40,7 +41,7 @@
             </li>
           </ul>
         </div>
-        <div class="order-wrap clearfix">
+        <div class="order-wrap clearfix" v-if="list.length>0">
           <div class="cart-tip fl">
             <a href="/">继续购物</a>
             共<span>{{list.length}}</span>件商品，已选择<span>{{checkedNum}}</span>件
@@ -50,6 +51,12 @@
             <a href="javascript:;" class="btn" @click="order">去结算</a>
           </div>
         </div>
+        <no-data v-if="!loading && list.length==0">
+          <template v-slot:tip>
+            啊哦,购物车空空如也~
+            <a href="/#/index" class="goIndex">去逛逛</a>
+          </template>
+        </no-data>
       </div>
     </div>
     <service-bar></service-bar>
@@ -59,20 +66,26 @@
 <script>
 import OrderHeader from '@/components/OrderHeader'
 import ServiceBar from '@/components/ServiceBar'
-import NavFooter from '@/components/NavFooter.vue'
+import NavFooter from '@/components/NavFooter'
+import Loading from '@/components/Loading'
+import NoData from '@/components/NoData'
+
 export default {
   name: 'cart',
   components: {
     OrderHeader,
     ServiceBar,
-    NavFooter
+    NavFooter,
+    Loading,
+    NoData
   },
   data() {
     return {
       list: [], //商品列表
       selectedAll: false, //是否全选
       cartTotalPrice: 0, //购物车总金额
-      checkedNum: 0 //选中的商品数量
+      checkedNum: 0, //选中的商品数量
+      loading: true //是否展示loading组件
     }
   },
   mounted() {
@@ -81,9 +94,14 @@ export default {
   methods: {
     getCartList() {
       // 获取购物车列表
-      this.axios.get('/carts').then(res => {
-        this.renderData(res)
-      })
+      this.axios
+        .get('/carts')
+        .then(res => {
+          this.renderData(res)
+        })
+        .catch(() => {
+          this.loading = false
+        })
     },
     updateCart(item, type) {
       // 更新购物车内商品数量和单选按钮,item是当前操作的商品信息，type是操作类型
@@ -138,6 +156,7 @@ export default {
       this.selectedAll = res.selectedAll
       this.cartTotalPrice = res.cartTotalPrice
       this.checkedNum = this.list.filter(item => item.productSelected).length
+      this.loading = false
     },
     order() {
       // 购物车“去结算”
@@ -287,6 +306,9 @@ export default {
           margin-left: 37px;
         }
       }
+    }
+    .goIndex {
+      color: #ff6600;
     }
   }
 }

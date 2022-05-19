@@ -49,12 +49,13 @@ export default {
     h2 {
       color: $colorB;
       font-size: $fontC;
-    }
-    span {
-      font-size: $fontJ;
-      margin-left: 17px;
-      color: $colorD;
-      font-weight: 200;
+      span {
+        // 插槽内容的样式
+        font-size: $fontJ;
+        margin-left: 17px;
+        color: $colorD;
+        font-weight: 200;
+      }
     }
   }
   .username {

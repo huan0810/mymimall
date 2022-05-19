@@ -35,3 +35,14 @@
   background: url($img) no-repeat center;
   background-size: contain;
 }
+
+// 高,行高
+@mixin height($h: 0, $lh: $h) {
+  height: $h;
+  line-height: $lh;
+}
+
+// 边框
+@mixin border($bw: 1px, $bc: $colorF, $bs: solid) {
+  border: $bw $bs $bc;
+}
