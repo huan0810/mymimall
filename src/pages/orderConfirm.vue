@@ -1,6 +1,6 @@
 <template>
   <div class="order-confirm">
-    <order-header :title="'订单确认'">
+    <order-header title="订单确认">
       <template v-slot:tip>
         <span>请仔细核对收货地址</span>
       </template>
@@ -280,6 +280,7 @@ export default {
       })
     },
     orderSubmit() {
+      // 提交订单
       // 先判断当前有没有选中地址
       let item = this.list[this.checkIndex]
       if (!item) {

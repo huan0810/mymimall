@@ -1,6 +1,6 @@
 <template>
   <div>
-    <order-header :title="'订单列表'">
+    <order-header title="订单列表">
       <template v-slot:tip>
         <span>请谨防钓鱼链接或诈骗电话，了解更多></span>
       </template>

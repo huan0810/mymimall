@@ -14,25 +14,32 @@ axios.defaults.baseURL = '/api' //转发时把/api置为空
 axios.defaults.timeout = 8000
 
 // 响应拦截器,接口错误拦截
-axios.interceptors.response.use(function (response) {
-  // response返回的是axios给我们封装的对象,其中response.data才是服务器真正的返回值
-  let res = response.data
-  let path = location.hash //location 属性用于获取或设置窗体的 URL
-  if (res.status == 0) {
-    // 成功，状态码为0
-    return res.data
-  } else if (res.status == 10) {
-    // 未登录，状态码10
-    if (path !== '#/index') {
-      //首页在未登录状态下也可以访问
-      window.location.href = '/#/login'
+axios.interceptors.response.use(
+  function (response) {
+    // response返回的是axios给我们封装的对象,其中response.data才是服务器真正的返回值
+    let res = response.data
+    let path = location.hash //location 属性用于获取或设置窗体的 URL
+    if (res.status == 0) {
+      // 成功，状态码为0
+      return res.data
+    } else if (res.status == 10) {
+      // 未登录，状态码10
+      if (path !== '#/index') {
+        //首页在未登录状态下也可以访问
+        window.location.href = '/#/login'
+      }
+      return Promise.reject(res)
+    } else {
+      Message.warning(res.msg) //此处不能用this.$message，因为还没挂载到Vue.prototype上
+      return Promise.reject(res)
     }
-    return Promise.reject(res)
-  } else {
-    Message.warning(res.msg) //此处不能用this.$message，因为还没挂载到Vue.prototype上
-    return Promise.reject(res)
+  },
+  (error) => {
+    let res = error.response
+    Message.error(res.data.message)
+    return Promise.reject(error)
   }
-})
+)
 
 Vue.config.productionTip = false
 

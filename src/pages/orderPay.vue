@@ -1,6 +1,6 @@
 <template>
   <div class="order-pay">
-    <order-header :title="'订单支付'">
+    <order-header title="订单支付">
       <template v-slot:tip>
         <span>请谨防钓鱼链接或诈骗电话，了解更多></span>
       </template>
@@ -55,14 +55,23 @@
         </div>
       </div>
     </div>
+    <scan-pay-code v-if="showPay" :img="payImg" @close="closePay"></scan-pay-code>
+    <modal title="支付确认" btnType="3" confirmText="查看订单" cancelText="未支付" :showModal="showModal" @submit="goOrderList" @cancel="showModal=false">
+      <template v-slot:body>
+        <p>您是否已完成支付?</p>
+      </template>
+    </modal>
   </div>
 </template>
 <script>
+import QRCode from 'qrcode'
 import OrderHeader from '@/components/OrderHeader'
+import ScanPayCode from '@/components/ScanPayCode'
+import Modal from '@/components/Modal'
 
 export default {
   name: 'order-pay',
-  components: { OrderHeader },
+  components: { OrderHeader, ScanPayCode, Modal },
   data() {
     return {
       orderNo: this.$route.query.orderNo,
@@ -70,7 +79,11 @@ export default {
       orderItemVoList: [], //订单项列表
       payment: 0, //订单总金额
       showDetail: false, //是否显示订单详情
-      payType: '' //支付类型，1支付宝，2微信
+      payType: '', //支付类型，1支付宝，2微信
+      showPay: false, //是否显示微信二维码弹框
+      payImg: '', //生成的二维码图片
+      showModal: false, //是否展示'确认支付'弹框
+      T: '' //定时器id
     }
   },
   mounted() {
@@ -88,8 +101,54 @@ export default {
     paySubmit(payType) {
       this.payType = payType //用于选中高亮显示
       if (payType == 1) {
+        // 支付宝支付,打开alipay中间页
         window.open('/#/order/alipay?orderId=' + this.orderNo, '_blank')
+      } else {
+        // 微信支付, 此时已拿到订单总金额payment, 不需要async/await异步处理了
+        this.axios
+          .post('/pay', {
+            orderId: this.orderNo,
+            orderName: 'phonemall支付订单', //扫码支付时订单名称
+            amount: this.payment, //订单总金额
+            payType: 2 //1支付宝，2微信
+          })
+          .then(res => {
+            // 把返回的content,通过qrcode插件转换成url地址
+            QRCode.toDataURL(res.content)
+              .then(url => {
+                // 弹出二维码弹框
+                this.showPay = true
+                this.payImg = url
+                this.loopOrderState() //轮询订单支付状态
+              })
+              .catch(() => {
+                this.$message.error('微信二维码生成失败,请稍后重试')
+              })
+          })
       }
+    },
+    closePay() {
+      // 关闭二维码弹框,打开'确认支付'弹框,清理轮询定时器
+      this.showPay = false
+      this.showModal = true
+      clearInterval(this.T)
+    },
+    loopOrderState() {
+      // 轮询当前订单的支付状态,每1s就拉取一次订单状态
+      // setInterval重复调用,setTimeout只调用一次
+      this.T = setInterval(() => {
+        this.axios.get(`/orders/${this.orderNo}`).then(res => {
+          if (res.status == 20) {
+            // status为20时,表示已支付,就自动跳转到订单列表
+            clearInterval(this.T)
+            this.goOrderList()
+          }
+        })
+      }, 1000)
+    },
+    goOrderList() {
+      // 用户点击查看订单按钮
+      this.$router.push('/order/list')
     }
   }
 }
@@ -150,9 +209,6 @@ export default {
             &.up {
               transform: rotate(180deg);
             }
-          }
-          .icon-up {
-            transform: rotate(180deg);
           }
         }
       }

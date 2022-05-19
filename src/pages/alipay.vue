@@ -1,7 +1,7 @@
 <!-- 跳转到支付宝支付的中转页面 -->
 <template>
   <div class="alipay">
-    <order-header :title="'订单支付'">
+    <order-header title="订单支付">
       <template v-slot:tip>
         <span>请谨防钓鱼链接或诈骗电话，了解更多></span>
       </template>
