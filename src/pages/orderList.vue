@@ -46,6 +46,13 @@
               </div>
             </div>
           </div>
+          <!-- 滚动加载更多,通过npm插件vue-infinite-scroll实现 -->
+          <!-- v-infinite-scroll="loadMore" 自定义指令,loadMore是加载更多的方法 -->
+          <!-- infinite-scroll-disabled="busy"  控制禁用/放开滚动加载 -->
+          <!-- infinite-scroll-distance="410" 离底部有多远是开始滚动加载 -->
+          <div class="load-more" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="410">
+            <img src="/imgs/loading-svg/loading-spinning-bubbles.svg" v-show="scrollLoading">
+          </div>
           <no-data v-if="!loading && list.length==0">
             <template v-slot:tip>
               当前暂无提交的订单记录
@@ -61,14 +68,19 @@
 import OrderHeader from '@/components/OrderHeader'
 import Loading from '@/components/Loading'
 import NoData from '@/components/NoData'
+import infiniteScroll from 'vue-infinite-scroll'
 
 export default {
   name: 'order-list',
   components: { OrderHeader, Loading, NoData },
+  directives: { infiniteScroll },
   data() {
     return {
       list: [], //订单列表
-      loading: true
+      loading: true,
+      pageNum: 1, //页码
+      busy: true, //是否触发滚动加载更多,true禁用滚动加载
+      scrollLoading: false //滚动加载的动画
     }
   },
   mounted() {
@@ -76,11 +88,25 @@ export default {
   },
   methods: {
     getOrderList() {
+      this.scrollLoading = true //请求之前,显示滚动加载的动画
+      // this.busy = true
       this.axios
-        .get('/orders')
+        .get('/orders', {
+          params: {
+            pageNum: this.pageNum
+          }
+        })
         .then(res => {
           this.loading = false
-          this.list = res.list
+          this.list = this.list.concat(res.list)
+          this.scrollLoading = false //请求后,隐藏滚动加载的动画
+          // this.busy = false
+          // 判断是否有下一页
+          if (res.hasNextPage) {
+            this.busy = false //释放busy
+          } else {
+            this.busy = true //禁用滚动加载
+          }
         })
         .catch(() => {
           this.loading = false
@@ -94,6 +120,14 @@ export default {
           orderNo
         }
       })
+    },
+    loadMore() {
+      // 滚动加载更多
+      this.busy = true //禁用滚动加载
+      setTimeout(() => {
+        this.pageNum++
+        this.getOrderList()
+      }, 500)
     }
   }
 }
@@ -171,8 +205,7 @@ export default {
         background-color: #ff6600;
         border-color: #ff6600;
       }
-      .load-more,
-      .scroll-more {
+      .load-more {
         text-align: center;
       }
     }
