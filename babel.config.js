@@ -8,5 +8,6 @@ module.exports = {
         styleLibraryName: 'theme-chalk'
       }
     ]
-  ]
+  ],
+  favicon: '/favicon.ico'
 }
