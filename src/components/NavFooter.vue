@@ -52,5 +52,12 @@ export default {
     }
     margin-bottom: 13px;
   }
+  .copyright {
+    a {
+      color: $colorD;
+      font-size: $fontI;
+      text-align: center;
+    }
+  }
 }
 </style>
