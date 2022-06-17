@@ -13,7 +13,7 @@
       <a href="javascript:;">特色服务</a>
     </div>
     <div class="copyright">
-      © mi.com <a href="https://beian.miit.gov.cn">豫ICP备2022014711号-1</a> 京公网安备11010802020134号 京网文[2020]0276-042号
+      © mi.com <a href="https://beian.miit.gov.cn" target="_blank">豫ICP备2022014711号-1</a> 京公网安备11010802020134号 京网文[2020]0276-042号
     </div>
   </div>
 </template>
