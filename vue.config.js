@@ -10,6 +10,7 @@ module.exports = {
         target: 'http://mall-pre.springboot.cn',
         changeOrigin: true,
         pathRewrite: {
+          //路径转发规则，把api设置为空
           '/api': ''
         }
       }
